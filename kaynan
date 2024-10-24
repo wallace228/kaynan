@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aventura Interativa</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="game-container">
+        <h1>Aventura Interativa</h1>
+        <p id="story-text">Bem-vindo à sua aventura! O que você vai fazer?</p>
+        <div id="choices">
+            <!-- Botões de escolha serão adicionados dinamicamente pelo JavaScript -->
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+/* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+#game-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+#story-text {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px 0;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+// script.js
+
+const storyText = document.getElementById('story-text');
+const choicesContainer = document.getElementById('choices');
+
+// Estrutura de dados que armazena as cenas da aventura
+const story = {
+    start: {
+        text: "Você está em uma floresta escura. Dois caminhos se abrem à sua frente. Um parece seguro, o outro mais perigoso.",
+        choices: [
+            { text: "Escolher o caminho seguro", next: "safePath" },
+            { text: "Escolher o caminho perigoso", next: "dangerPath" }
+        ]
+    },
+    safePath: {
+        text: "Você escolheu o caminho seguro. Após caminhar um pouco, você encontra uma cabana. O que fazer?",
+        choices: [
+            { text: "Entrar na cabana", next: "cabin" },
+            { text: "Continuar andando", next: "keepWalking" }
+        ]
+    },
+    dangerPath: {
+        text: "Você escolheu o caminho perigoso. Após alguns passos, você escuta algo se movendo nos arbustos.",
+        choices: [
+            { text: "Investigar o barulho", next: "investigate" },
+            { text: "Correr de volta", next: "runBack" }
+        ]
+    },
+    cabin: {
+        text: "Você entra na cabana e encontra um baú misterioso. Ao abri-lo, você encontra um tesouro!",
+        choices: [
+            { text: "Recomeçar a aventura", next: "start" }
+        ]
+    },
+    keepWalking: {
+        text: "Você continua andando e encontra uma cidade pacífica. Fim da aventura!",
+        choices: [
+            { text: "Recomeçar a aventura", next: "start" }
+        ]
+    },
+    investigate: {
+        text: "Você descobre que o barulho era apenas o vento. Porém, o caminho está cheio de armadilhas!",
+        choices: [
+            { text: "Tentar desviar das armadilhas", next: "trap" },
+            { text: "Voltar e seguir o caminho seguro", next: "safePath" }
+        ]
+    },
+    runBack: {
+        text: "Você corre de volta em segurança. Fim da aventura!",
+        choices: [
+            { text: "Recomeçar a aventura", next: "start" }
+        ]
+    },
+    trap: {
+        text: "Você é pego em uma armadilha! Fim da aventura!",
+        choices: [
+            { text: "Recomeçar a aventura", next: "start" }
+        ]
+    }
+};
+
+// Função para carregar uma cena com base no ID
+function loadScene(sceneId) {
+    const scene = story[sceneId];
+    storyText.innerText = scene.text;
+    choicesContainer.innerHTML = '';
+
+    scene.choices.forEach(choice => {
+        const button = document.createElement('button');
+        button.innerText = choice.text;
+        button.onclick = () => loadScene(choice.next);
+        choicesContainer.appendChild(button);
+    });
+}
+
+// Iniciar o jogo na cena inicial
+loadScene('start');
+
+
